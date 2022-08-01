@@ -25,6 +25,15 @@ provider:
   runtime: nodejs16.x
   profile: default
 
+# plugins provided by serverless
+plugins:
+    - serverless-s3-sync
+
+custom:
+    s3Sync:
+        - bucketName: my-serverless-project-upload-bucket-061996
+          localDir: uploadData
+
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
