@@ -24,6 +24,9 @@ provider:
   name: aws
   runtime: nodejs16.x
   profile: default
+  httpApi:
+    cors: true
+
 
 # plugins provided by serverless
 plugins:
@@ -69,15 +72,15 @@ custom:
 #    - include-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  getUser:
+    handler: lambdas/getUser.handler
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
-#    events:
-#      - httpApi:
-#          path: /users/create
-#          method: get
+    events:
+      - httpApi:
+          path: /get-user/{ID}
+          method: get
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
