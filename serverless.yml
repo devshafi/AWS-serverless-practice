@@ -40,6 +40,7 @@ custom:
     s3Sync:
         - bucketName: my-serverless-project-upload-bucket-061996
           localDir: uploadData
+    tableName: player-points
 
 # you can overwrite defaults here
 #  stage: dev
@@ -125,6 +126,18 @@ resources:
      Type: AWS::S3::Bucket
      Properties:
        BucketName: my-serverless-project-upload-bucket-061996
+   MyDynamoDBTable:
+       Type: AWS::DynamoDB::Table
+       Properties:
+         TableName: ${self:custom.tableName}
+         AttributeDefinitions:
+           - AttributeName: ID
+             AttributeType: S
+         KeySchema:
+           - AttributeName: ID
+             KeyType: HASH
+         BillingMode: PAY_PER_REQUEST
+
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
