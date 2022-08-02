@@ -20,6 +20,23 @@ const Dynamo = {
         }
         console.log(data);
         return data;
+    },
+
+    async write(data, TableName) {
+        if (!data.ID) {
+            throw Error('No ID on the data')
+        }
+        const params = {
+            TableName,
+            Item: data
+        }
+        const res = await documentClient.put(params).promise();
+
+        if (!res) {
+            throw Error(`There was an error inserting ID of ${data.ID} into table ${TableName}`);
+        }
+
+        return data;
     }
 }
 
