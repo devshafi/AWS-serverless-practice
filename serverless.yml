@@ -28,12 +28,14 @@ provider:
     cors: true
   environment:
     tableName: ${self:custom.tableName}
+    bucketName: ${self:custom.bucketName}
 
   # allowing lambdas to access dynamodb 
   iamRoleStatements:
     - Effect: Allow
       Action: 
           - dynamodb:*
+          - s3:*
       Resource: '*'
 
 
@@ -47,10 +49,11 @@ package:
   individually: true
 
 custom:
-    s3Sync:
-        - bucketName: my-serverless-project-upload-bucket-061996
-          localDir: uploadData
     tableName: player-points
+    bucketName: my-serverless-project-upload-bucket-061996      
+    s3Sync:
+        - bucketName:  ${self:custom.bucketName}
+          localDir: uploadData
 
 # you can overwrite defaults here
 #  stage: dev
@@ -105,6 +108,12 @@ functions:
       - httpApi:
           path: /create-player-score/{ID}
           method: post
+  createFile:
+    handler: lambdas/endpoints/createFile.handler
+    events:
+      - httpApi:
+          path: /create-file/{fileName}
+          method: post
 
 # you can add CloudFormation resource templates here
 resources:
@@ -112,7 +121,7 @@ resources:
    DemoBucketUpload:
      Type: AWS::S3::Bucket
      Properties:
-       BucketName: my-serverless-project-upload-bucket-061996
+       BucketName: ${self:custom.bucketName}
    MyDynamoDBTable:
        Type: AWS::DynamoDB::Table
        Properties:
